@@ -1,0 +1,14 @@
+.git
+.github
+.idea
+.vscode
+*.md
+!README.md
+!DOCKER.md
+media/
+redesign/
+test_unit/
+*.log
+*.tmp
+*.db
+build/out/
