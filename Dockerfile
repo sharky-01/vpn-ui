@@ -18,12 +18,14 @@ RUN apk --no-cache --update add \
     ca-certificates \
     unzip
 
-# Copy dependency definitions and download modules
+# Copy dependency definitions
 COPY go.mod go.sum ./
-RUN go mod download
 
 # Copy entire source tree
 COPY . .
+
+# Ensure modules are tidy and synchronized
+RUN go mod tidy
 
 # Download base geo data files (geoip.dat, geosite.dat) into corebundle/core
 RUN mkdir -p corebundle/core && \
