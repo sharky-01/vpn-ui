@@ -1,11 +1,13 @@
 # ========================================================
 # Stage 1: Builder
 # ========================================================
-FROM golang:1.24-alpine AS builder
+FROM golang:alpine AS builder
 
 WORKDIR /src
 ARG TARGETARCH
 ARG TARGETOS
+
+ENV GOTOOLCHAIN=auto
 
 RUN apk --no-cache --update add \
     build-base \
