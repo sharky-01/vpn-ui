@@ -27,8 +27,14 @@ COPY . .
 # Ensure modules are tidy and synchronized
 RUN go mod tidy
 
-# Download base geo data files (geoip.dat, geosite.dat) into corebundle/core
-RUN mkdir -p corebundle/core && \
+# Download Xray-core binary and base geo data files into corebundle/core
+RUN mkdir -p corebundle/core/amd64 corebundle/core/arm64 && \
+    curl -fsSL -o /tmp/xray-amd64.zip https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip && \
+    unzip -q -o /tmp/xray-amd64.zip xray -d corebundle/core/amd64/ && \
+    curl -fsSL -o /tmp/xray-arm64.zip https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-arm64-v8a.zip && \
+    unzip -q -o /tmp/xray-arm64.zip xray -d corebundle/core/arm64/ && \
+    chmod +x corebundle/core/amd64/xray corebundle/core/arm64/xray && \
+    rm -f /tmp/xray-*.zip && \
     curl -fsSL -o corebundle/core/geoip.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat && \
     curl -fsSL -o corebundle/core/geosite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
 
@@ -77,7 +83,7 @@ ENV VPNUI_DB_FOLDER=/etc/vpn-ui
 ENV VPNUI_LOG_FOLDER=/var/log/vpn-ui
 ENV TZ=UTC
 
-EXPOSE 2053
+EXPOSE 2053 2083
 
 ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"]
 CMD ["/usr/local/vpn-ui/vpn-ui"]
