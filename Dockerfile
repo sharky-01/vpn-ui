@@ -77,7 +77,6 @@ ENV VPNUI_DB_FOLDER=/etc/vpn-ui
 ENV VPNUI_LOG_FOLDER=/var/log/vpn-ui
 ENV TZ=UTC
 
-VOLUME ["/etc/vpn-ui", "/root/cert"]
 EXPOSE 2053
 
 ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"]
